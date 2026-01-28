@@ -5,8 +5,9 @@ from typing import List
 import os
 
 class Executor:
-    def __init__(self, logger):
+    def __init__(self, logger, dry_run=True):
         self.logger = logger
+        self.dry_run = dry_run
         self.statistics = {
             'files_deleted': 0,
             'space_freed_mb': 0,
@@ -16,6 +17,10 @@ class Executor:
     
     def delete_file(self, file: Path, reason: str) -> bool:
         """Move file to quarantine (via logger)"""
+        if self.dry_run:
+            print(f"[DRY RUN] Would delete file: {file}")
+            return True
+
         if not file.exists():
             self.statistics['errors'].append(f"File does not exist: {file}")
             return False
