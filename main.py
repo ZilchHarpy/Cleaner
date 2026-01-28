@@ -8,15 +8,16 @@ from logger import CleanerLogger
 from recuperator import Recuperator
 
 class SmartCleaner:
-    def __init__(self, mode='general'):
+    def __init__(self, mode='general', dry_run=True):
         """
         Modes: 'general' or 'deep'
         """
         self.mode = mode
+        self.dry_run = dry_run
         self.analyzer = FilesAnalyzer()
         self.monitor = SystemMonitor()
         self.logger = CleanerLogger()
-        self.executor = Executor(self.logger)
+        self.executor = Executor(self.logger, dry_run=dry_run)
         
         # LLM is optional (fallback if Ollama is not running)
         self.llm = LLMClassifier()
@@ -296,7 +297,7 @@ def main():
     
     # Cleanup mode
     mode = 'deep' if choice == '2' else 'general'
-    cleaner = SmartCleaner(mode=mode)
+    cleaner = SmartCleaner(mode=mode, dry_run=True)
     
     try:
         if mode == 'general':
