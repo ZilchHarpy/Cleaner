@@ -136,3 +136,4 @@ class Executor:
     def get_statistics(self) -> dict:
         """Return execution statistics"""
         return self.statistics
+    

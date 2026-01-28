@@ -127,3 +127,4 @@ class Recuperator:
                 print("[!] No quarantine found in log")
         else:
             print("[*] Operation cancelled.")
+            

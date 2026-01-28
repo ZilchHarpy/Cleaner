@@ -78,3 +78,4 @@ class Config:
     def protected_process(process_name: str) -> bool:
         """Check if the process is protected by the whitelist"""
         return process_name.lower() in Config.WHITELIST_PROCESSES
+    
