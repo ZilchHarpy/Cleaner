@@ -87,7 +87,7 @@ class FilesAnalyzer:
                     if len(list_files) > 1:
                         dup_confirmed.append({
                             'files': list_files,
-                            'length_mb': length_mb,
+                            'size_mb': length_mb,
                             'accuracy': 1.0,
                             'type': 'confirmed'
                         })
@@ -128,14 +128,14 @@ class FilesAnalyzer:
                             if len(list_files) > 1:
                                 dup_confirmed.append({
                                     'files': list_files,
-                                    'length_mb': length_mb,
+                                    'size_mb': length_mb,
                                     'accuracy': 1.0,
                                     'type': 'confirmed'
                                 })
                     else:
                         dup_suspect.append({
                             'files': candidates,
-                            'length_mb': length_mb,
+                            'size_mb': length_mb,
                             'accuracy': accuracy,
                             'type': 'suspect'
                         })
@@ -328,6 +328,9 @@ class SystemMonitor:
         """
         Diagnóstico focado em uso anormal de recursos
         """
+        if not self.history:
+            self.snapshot()
+        
         if not self.history:
             return {}
         

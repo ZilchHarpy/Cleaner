@@ -33,9 +33,12 @@ class LLMClassifier:
         }
         
         try:
-            response = requests.post(endpoint, json=payload, timeout=30)
+            response = requests.post(endpoint, json=payload, timeout=300)
             response.raise_for_status()
             return json.loads(response.text)['response']
+        except requests.exceptions.Timeout:
+            print(f"[!] Ollama took a long time to respond (>300s)")
+            return ""
         except Exception as e:
             print(f"[!] Error consulting Ollama: {e}")
             return ""

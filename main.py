@@ -107,7 +107,13 @@ class SmartCleaner:
         
         # 3. Background processes
         print("\n[3/3] Analyzing background processes...")
+
+        self.monitor.snapshot()
         diagnosis = self.monitor.diagnose()
+
+        if not diagnosis or 'snapshot' not in diagnosis:
+            print("    [!] Unable to analyze processes")
+            return
         
         if diagnosis.get('problems'):
             print("\n    Problems detected:")
@@ -233,7 +239,13 @@ class SmartCleaner:
         
         # 6. Final system checkup
         print("\n[6/6] Final system checkup...")
+
+        self.monitor.snapshot()
         diagnosis = self.monitor.diagnose()
+
+        if not diagnosis or 'snapshot' not in diagnosis:
+            print("    [!] Was not possible to analyze system")
+            return
         
         print(f"\n    CPU: {diagnosis['snapshot']['cpu']['total']:.1f}%")
         print(f"    RAM: {diagnosis['snapshot']['ram']['percent']:.1f}% ({diagnosis['snapshot']['ram']['used_gb']:.2f} GB / {diagnosis['snapshot']['ram']['total_gb']:.2f} GB)")
