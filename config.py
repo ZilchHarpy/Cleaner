@@ -19,7 +19,20 @@ class Config:
         Path("C:/3DP"),
         Path("C:/AMD"),
         Path("C:/Autodesk"),
-        Path("C:/PerfLogs")
+        Path("C:/PerfLogs"),
+        Path("C:/Users/caioa/Desktop/Pendrive_CAIO32"),
+        Path("C:/Users/caioa/Desktop/Games"),
+        Path("C:/Users/caioa/Desktop/Estudos"),
+        Path("C:/Users/caioa/Desktop/Programing and Simulation"),
+        Path("C:/Users/caioa/Softwares"),
+        Path("C:/Users/caioa/Documentos/Docs_Caio"),
+        Path("C:/Users/caioa/Documentos/Logs_ASUS"),
+        Path("C:/Users/caioa/Downloads/ISOs"),
+        Path("C:/Users/caioa/External_Icons"),
+        Path("C:/Users/caioa/Pictures/Bobeiras"),
+        Path("C:/Users/caioa/Saved Games"),
+        Path("C:/Users/caioa/Obsidian_Vault"),
+        Path("C:/Users/caioa/Wallpapers")
     ]
 
     # This one is for processes you NEVER kill
