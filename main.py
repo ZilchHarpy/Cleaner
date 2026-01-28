@@ -8,7 +8,7 @@ from logger import CleanerLogger
 from recuperator import Recuperator
 
 class SmartCleaner:
-    def __init__(self, mode='general', dry_run=True):
+    def __init__(self, mode='general', dry_run=False):
         """
         Modes: 'general' or 'deep'
         """
@@ -54,7 +54,15 @@ class SmartCleaner:
         
         if temp_files:
             print(f"    Found: {len(temp_files)} temporary files")
-            self.executor.delete_batch(temp_files, "temporary file")
+            # show list
+            for file in temp_files:
+                print(f"      - {file}")
+
+            response = input("    Delete them? [Y/N]: ").strip().lower()
+            if response != 'n':
+                self.executor.delete_batch(temp_files, "temporary file")
+            else:
+                print("    Skipped deletion of temporary files")
         else:
             print("    No temporary files found")
         
@@ -76,7 +84,7 @@ class SmartCleaner:
                 if not file.is_file():
                     continue
                 
-                if file.suffix.lower() in Config.EXTENSIONS_COMPRESSED:
+                if file.suffix.lower() in Config.EXTENSIONS_COMPRESSED and not Config.is_in_whitelist(file):
                     # Delete only if > 30 days unused
                     import time
                     days_unused = (time.time() - file.stat().st_mtime) / 86400
@@ -86,6 +94,10 @@ class SmartCleaner:
         
         if compressed:
             print(f"    Found: {len(compressed)} old compressed files (>30 days)")
+            # show list
+            for file in compressed:
+                print(f"      - {file} (last modified: {file.stat().st_mtime})")
+
             response = input("    Delete them? [Y/n]: ").strip().lower()
             
             if response != 'n':
@@ -100,7 +112,7 @@ class SmartCleaner:
         if diagnosis.get('problems'):
             print("\n    Problems detected:")
             for prob in diagnosis['problems']:
-                print(f"    ⚠️  {prob['message']} (severity: {prob['severity']})")
+                print(f"      {prob['message']} (severity: {prob['severity']})")
             
             # Identifies candidate processes
             candidate_processes = []
@@ -228,7 +240,7 @@ class SmartCleaner:
         print(f"    Disk: {diagnosis['snapshot']['disk']['percent']:.1f}% ({diagnosis['snapshot']['disk']['free_gb']:.2f} GB free)")
         
         if diagnosis.get('problems'):
-            print("\n    ⚠️  Problems detected:")
+            print("\n      Problems detected:")
             for prob in diagnosis['problems']:
                 print(f"       - {prob['message']}")
         else:
@@ -259,6 +271,11 @@ class SmartCleaner:
         else:
             print("\n[*] Files remain in quarantine.")
             print(f"    To recover later: python recuperator.py {log_file}")
+
+
+
+
+
 
 def main():
     print("""
@@ -297,7 +314,7 @@ def main():
     
     # Cleanup mode
     mode = 'deep' if choice == '2' else 'general'
-    cleaner = SmartCleaner(mode=mode, dry_run=True)
+    cleaner = SmartCleaner(mode=mode, dry_run=False)
     
     try:
         if mode == 'general':

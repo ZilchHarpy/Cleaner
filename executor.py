@@ -5,7 +5,7 @@ from typing import List
 import os
 
 class Executor:
-    def __init__(self, logger, dry_run=True):
+    def __init__(self, logger, dry_run=False):
         self.logger = logger
         self.dry_run = dry_run
         self.statistics = {
@@ -116,7 +116,7 @@ class Executor:
             print(f"    - {proc['name']} (PID {proc['pid']}) - RAM: {proc['ram']}%")
         
         if ask_confirmation:
-            response = input("\n[?] Do you want to kill ALL these processes? [y/N]: ").strip().lower()
+            response = input("\n[?] Do you want to kill ALL these processes? [Y/N]: ").strip().lower()
             if response != 'y':
                 print("[*] Process kill cancelled.")
                 return
