@@ -109,8 +109,21 @@ class Recuperator:
         confirm = input("\n  DELETE EVERYTHING PERMANENTLY? (type 'YES' to confirm): ")
         
         if confirm.upper() == 'YES':
-            quarantine = Path(self.log_data['actions'][0]['quarantine']).parent
-            shutil.rmtree(quarantine)
-            print(f"[+] Quarantine deleted: {quarantine}")
+            # Find first action with quarantine
+            quarantine_path = None
+            for action in self.log_data['actions']:
+                if 'quarantine' in action:
+                    quarantine_path = action['quarantine']
+                    break
+            
+            if quarantine_path:
+                quarantine = Path(quarantine_path).parent
+                try:
+                    shutil.rmtree(quarantine)
+                    print(f"[+] Quarantine deleted: {quarantine}")
+                except Exception as e:
+                    print(f"[!] Error deleting quarantine: {e}")
+            else:
+                print("[!] No quarantine found in log")
         else:
             print("[*] Operation cancelled.")
